@@ -2,6 +2,8 @@
 const Fallback = artifacts.require("Fallback");
 const Telephone = artifacts.require("Telephone");
 const AttackTelephone = artifacts.require("AttackTelephone");
+const Force = artifacts.require("Force")
+const AttackForce = artifacts.require("AttackForce")
 
 module.exports = async function(deployer, network, accounts) {
   console.log("accounts: ", accounts);
@@ -14,4 +16,7 @@ module.exports = async function(deployer, network, accounts) {
   console.log(attack);
   let owner = await attack.contract.methods.owner().call()
   console.log("attack owner: ", owner);
+
+  await deployer.deploy(Force)
+  await deployer.deploy(AttackForce, Force.address)
 };
