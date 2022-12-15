@@ -6,7 +6,7 @@ const AttackForce = artifacts.require("AttackForce");
 let forceInstance
 let attackForceInstance
 
-contract('Fallback', (accounts) => {
+contract('Force', (accounts) => {
 
   before(async () => {
     forceInstance = await Force.deployed()
