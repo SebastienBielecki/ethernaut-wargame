@@ -49,15 +49,32 @@ In order to send Ether to the Force contract, one possibility is to create an at
 Test it by running
 `truffle test test/7.Force.js`
 
-## King
+## 8. King
 
 https://ethernaut.openzeppelin.com/level/0x725595BA16E76ED1F6cC1e1b65A88365cC494824
 
-We are asked to become king of the contract, and do not let anyone else become king.
-We can see in the King contract than in order to become king, the payment to the previpous king should be succesfull.
-We cannot prevent an EAO to receive fund... but we can prevent a smart contract from receiving funds (expect in the 7.force scenario above).
-So the way to hack the King contract is to create an attack smart contract (AttackKing), the will become king of the King contract. The AttackKing contract will not implement a fallbak function to receive Ethers, so any Ether send to this smart contract will revert, and so nobody to reclaim kingship of the king contract.
+We are asked to become king of the "King" contract, and do not let anyone else become king.
+We can see in the King contract than in order to become king, the payment to the previous king should be succesfull.
+We cannot prevent an EAO (Externally Owned Account) from receiving fund... but we can prevent a smart contract from receiving funds (expect in the 7.force scenario above).
+So the way to hack the King contract is to create an attack smart contract (AttackKing), that will become king of the King contract. The AttackKing contract will not implement a fallbak function to receive Ethers, so any Ether sent to this smart contract will revert, and so nobody can reclaim kingship of the king contract.
 
 Test it by running 
-`truffle test test/7.King.js`
+`truffle test test/8.King.js`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
