@@ -6,21 +6,22 @@ const Force = artifacts.require("Force")
 const AttackForce = artifacts.require("AttackForce")
 const King = artifacts.require("King")
 const AttackKing = artifacts.require("AttackKing")
+const Reentrance = artifacts.require("Reentrance")
+const AttackReentrance = artifacts.require("AttackReentrance")
 
 module.exports = async function(deployer, network, accounts) {
-  //console.log("accounts: ", accounts);
-  //console.log("account 1:", accounts[1]);
+
   await deployer.deploy(Fallback);
   await deployer.deploy(Telephone);
   
   let attack = await deployer.deploy(AttackTelephone, Telephone.address, {from: accounts[1]})
   deployer.deploy(AttackTelephone, Telephone.address);
-  //console.log(attack);
   let owner = await attack.contract.methods.owner().call()
-  //console.log("attack owner: ", owner);
 
   await deployer.deploy(Force)
   await deployer.deploy(AttackForce, Force.address)
   await deployer.deploy(King, {from: accounts[0], value: web3.utils.toWei("1", "finney")})
   await deployer.deploy(AttackKing, King.address, {from: accounts[1]})
+  await deployer.deploy(Reentrance, {from: accounts[0]})
+  await deployer.deploy(AttackReentrance, Reentrance.address, {from: accounts[1]})
 };
