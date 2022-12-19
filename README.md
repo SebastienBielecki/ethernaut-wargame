@@ -58,23 +58,33 @@ We can see in the King contract than in order to become king, the payment to the
 We cannot prevent an EAO (Externally Owned Account) from receiving fund... but we can prevent a smart contract from receiving funds (expect in the 7.force scenario above).
 So the way to hack the King contract is to create an attack smart contract (AttackKing), that will become king of the King contract. The AttackKing contract will not implement a fallbak function to receive Ethers, so any Ether sent to this smart contract will revert, and so nobody can reclaim kingship of the king contract.
 
+Key takeaway: never assume a transaction will be succesfull
+
 Test it by running 
 `truffle test test/8.King.js`
 
+## 9. Reentrancy
 
+https://ethernaut.openzeppelin.com/level/0x573eAaf1C1c2521e671534FAA525fAAf0894eCEb
 
+This contract is vulnerable to re-entrancy attack, because:
+- we never know if we are sending a transaction to a smart contract or an EOA.
+- if the recipient is a smart contract, the smart contract can trigger some logic through the receive() function.
+- in the vulnerable contract, the check-effects-interaction pattern is NOT implemented, e.g. the transaction is sent, and only after, the balance is adjusted. It should be the reverse. this makes the contract vulnerable to a re-entrancy attack.
+So in order to hack the contract, we need to:
+- create an attack contract
+- the attack contract will send some funds to the vulnerable contract, in order to get a positive balance
+- the attack contract will trigger the withdraw function from the culnerable contract
+- when the attack contract, receives funds, the receive() fallback function will request another withdraw. Since the balance of the attack smart contract has not been debited yet, the vulnerable contract will accept another withdraw... and so on, until the vulnerable contract balance gets to 0
 
+Test it by running 
+`truffle test test/9.Reentrance.js`
 
+## Vault
 
+This ones shows that even if a state variable is declared as private, it can be easily accessed, as the state variable are stored in the storage slots of the smart contract and can be accessed by anybody.
 
+In this case the password is stored in slot 1, so it is easuly access via a call to the web3.eht.getStorageAt method, passing the Vault contract address and the slot number as parameters.
 
-
-
-
-
-
-
-
-
-
-
+Test it by running 
+`truffle test test/8.Vault.js
